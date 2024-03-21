@@ -1,6 +1,6 @@
 # Compile labSix
-labSix: labSix.c
-	gcc labSix.c -o labSix
+labSix: labSix.cpp
+	g++ labSix.cpp -o labSix
 
 # Clean build files
 clean:
