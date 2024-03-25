@@ -13,7 +13,7 @@ int getSize(const char* filename) {
     string line;
     int size = 0;
     if (file.is_open()) {
-        //Only read the first line
+        
         if (getline(file, line)) {
             stringstream ss(line);
             int temp;
@@ -28,20 +28,21 @@ int getSize(const char* filename) {
     return size; //The size is the number of elements in the first row
 }
 
+//Function to read the two matrices from a file.
 void readMatrixFromFile(const char* filename, Matrix& matrix1, Matrix& matrix2) {
-    int size = getSize(filename); //Determine the size of the matrices first
+    int size = getSize(filename); //Determine the size of the matrices first.
     fstream file(filename);
     if (file.is_open()) {
         matrix1.resize(size, vector<int>(size));
         matrix2.resize(size, vector<int>(size));
 
-        //Read the first matrix
+        //Read the first matrix.
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 file >> matrix1[i][j];
             }
         }
-        //Read the second matrix
+        //Read the second matrix.
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 file >> matrix2[i][j];
@@ -53,6 +54,7 @@ void readMatrixFromFile(const char* filename, Matrix& matrix1, Matrix& matrix2) 
     }
 }
 
+//Function to print a matrix.
 void printMatrix(const Matrix& matrix) {
     cout << "Printing Matrix...\n";
     for (const auto& row : matrix) {
@@ -63,10 +65,11 @@ void printMatrix(const Matrix& matrix) {
     }
 }
 
+//Function to add two matrices. 
 void addMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     int size = matrix1.size();
     Matrix result(size, vector<int>(size));
-    cout << "Adding Matrices...\n";
+    cout << "\nAdding Matrices...\n";
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             result[i][j] = matrix1[i][j] + matrix2[i][j];
@@ -75,10 +78,11 @@ void addMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     printMatrix(result);
 }
 
+//Function to multiply two matrices. 
 void multiplyMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     int size = matrix1.size();
     Matrix result(size, vector<int>(size, 0)); //Initialize with 0 for multiplication
-    cout << "Multiplying Matrices...\n";
+    cout << "\nMultiplying Matrices...\n";
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             for (int k = 0; k < size; ++k) {
@@ -89,10 +93,11 @@ void multiplyMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     printMatrix(result);
 }
 
+//Function to subtract the second matrix from the first matrix. 
 void subtractMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     int size = matrix1.size();
     Matrix result(size, vector<int>(size));
-    cout << "Subtracting Matrices...\n";
+    cout << "\nSubtracting Matrices...\n";
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             result[i][j] = matrix1[i][j] - matrix2[i][j];
@@ -101,9 +106,10 @@ void subtractMatrix(const Matrix& matrix1, const Matrix& matrix2) {
     printMatrix(result);
 }
 
+//Function to update an element in the matrix specified by the user. 
 void updateElem(Matrix& matrix) {
     int row, col, newVal;
-    cout << "Enter the row you want to update: ";
+    cout << "\nEnter the row you want to update: ";
     cin >> row;
     cout << "Enter the column you want to update: ";
     cin >> col;
@@ -119,10 +125,38 @@ void updateElem(Matrix& matrix) {
     }
 }
 
+//Function to print the max value in matrix 1
+void printMaxValue(Matrix& matrix){
+    //Initialize max with the first element of the matrix.
+    int max = matrix[0][0];
+    //Iterate through the matrix to find the max value.
+    for (const auto& row : matrix){
+        for (const auto& elem : row){
+            if(elem>max){
+                max = elem; //Update the max if a larger value is found.
+            }
+        }
+    }
+    cout << "\nMaximum value in the first matrix: "<< max << endl;
+}
+
+//Function to transpose matrix 1. 
+void transposeMatrix(const Matrix& matrix){
+    size_t rows = matrix.size();
+    Matrix transpose(rows, vector<int>(rows));
+
+    for (size_t i = 0; i < rows; ++i){
+        for (size_t j = 0; j < rows; ++j){
+            transpose[j][i]=matrix[i][j];
+        }
+    }
+    cout << "\nTransposing Matrix...\n";
+    printMatrix(transpose);
+}
+
 int main() {
     Matrix matrix1, matrix2; 
 
-    //Assuming matrix_input.txt format is valid and contains 2*N*N integers
     readMatrixFromFile("matrix_input.txt", matrix1, matrix2);
     
     printMatrix(matrix1);
@@ -135,6 +169,10 @@ int main() {
     subtractMatrix(matrix1, matrix2);
 
     updateElem(matrix1);
+
+    printMaxValue(matrix1);
+
+    transposeMatrix(matrix1);
 
     return 0;
 }
